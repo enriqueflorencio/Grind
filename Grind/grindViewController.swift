@@ -11,10 +11,18 @@ import UIKit
 class grindViewController: UITableViewController {
 
     var itemArray = ["Feed the dog", "Clean the house", "Water plants"]
+    
+    //Set up the UserDefaults method
+    let defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        //optional chaining, if the defaults array exists, then set the itemArray equal to items
+        //items is just a variable to see if the default array exists
+        if let items = defaults.array(forKey: "grindListArray") as? [String] {
+            itemArray = items
+        }
     }
     
     //Define how many rows you're going to use
@@ -58,6 +66,9 @@ class grindViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //Add the new string into the array
             self.itemArray.append(textField.text!)
+            
+            //Set up the defaults to save the user data
+            self.defaults.set(self.itemArray, forKey: "grindListArray")
             
             //Reload the tableview data so that a new cell is allocated for the incoming string
             self.tableView.reloadData()
