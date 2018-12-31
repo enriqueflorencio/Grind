@@ -10,7 +10,7 @@ import UIKit
 
 class grindViewController: UITableViewController {
 
-    let itemArray = ["Feed the dog", "Clean the house", "Water plants"]
+    var itemArray = ["Feed the dog", "Clean the house", "Water plants"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,9 +24,9 @@ class grindViewController: UITableViewController {
     
     
     //Create three unique cells for each string in the itemArray
-    //dequeResuableCell dequeues a cell (Table Views automatically use the queue data structure)
-    //So grab cells from the tableView by using its identifier "grindItemCell"
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        //dequeResuableCell dequeues a cell (Table Views automatically use the queue data structure)
+        //So grab cells from the tableView by using its identifier "grindItemCell"
         let cell = tableView.dequeueReusableCell(withIdentifier: "grindItemCell", for: indexPath)
         cell.textLabel?.text = itemArray[indexPath.row]
         print(cell)
@@ -47,6 +47,34 @@ class grindViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
     }
+    
+    //Add new items in the todo list
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        //This is the string that the user enters
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add New Item", message: "", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            //Add the new string into the array
+            self.itemArray.append(textField.text!)
+            
+            //Reload the tableview data so that a new cell is allocated for the incoming string
+            self.tableView.reloadData()
+        }
+        
+        //Create the textfield for the user to insert the item into
+        alert.addTextField { (alertTextField) in
+            //"Create new item" is what will be displayed in grey
+            alertTextField.placeholder = "Create new item"
+            textField = alertTextField
+        }
+        
+        //Add the action to our alert
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
    
 }
 
